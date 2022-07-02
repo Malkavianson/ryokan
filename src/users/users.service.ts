@@ -24,7 +24,7 @@ export class UsersService {
 	handleErrorConstraintUnique(error: Error): never {
 		const splitedMessage = error.message.split('`');
 
-		const errorMessage = `'${splitedMessage[splitedMessage.length - 2]}' already registred`;
+		const errorMessage = `${splitedMessage[splitedMessage.length - 2]} already registred`;
 
 		throw new UnprocessableEntityException(errorMessage);
 	}
@@ -50,9 +50,16 @@ export class UsersService {
 	}
 
 	async update(id: string, dto: UpdateUserDto): Promise<User | void> {
-		await this.verifyIdAndReturnUser(id);
+		const hashedPassword = await bcrypt.hash(dto.password, 8);
 
-		return this.prisma.user.update({ where: { id }, data: dto }).catch(this.handleErrorConstraintUnique);
+		await this.verifyIdAndReturnUser(id);
+		const data: CreateUserDto = {
+			name: dto.name,
+			email: dto.email,
+			password: hashedPassword,
+		};
+
+		return this.prisma.user.update({ where: { id }, data }).catch(this.handleErrorConstraintUnique);
 	}
 
 	async remove(id: string) {
