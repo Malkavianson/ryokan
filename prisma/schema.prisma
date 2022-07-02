@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  // cpf       String
+  // isAdmin   Boolean
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+// model Profiles {
+//   id        String   @id @default(uuid())
+//   title     String   @unique
+//   imageURL  String
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   @@map("profiles")
+// }
+
+// Games
+model Product {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String
+  price       Float
+  image       String
+  // title              String
+  // description        String
+  // coverImageUrl      String
+  // year               Int
+  // imdbScore          Int
+  // trailerYouTubeUrl  String
+  // gameplayYouTubeUrl String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // @@map("games")
+  @@map("product")
+}
+
+model Table {
+  // model Genres {
+  id        String   @id @default(uuid())
+  number    Int      @unique
+  //   name String @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // @@map("genres")
+  @@map("table")
+}
