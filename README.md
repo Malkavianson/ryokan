@@ -33,7 +33,7 @@ Na pasta raíz do projeto podem ser executados os seguintes comandos:
   ```
   ### Desenvolvimento
   ```
-  npm run start:dev
+  npm run dev
   ```
 
 Acesse [http://localhost:3333](http://localhost:3333) para visualizá-lo em seu navegador de forma local
