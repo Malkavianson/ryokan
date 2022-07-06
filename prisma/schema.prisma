@@ -22,17 +22,36 @@ model User {
   @@map("user")
 }
 
+// model Profiles {
+//   id       String @id @default(uuid())
+//   title    String @unique
+//   imageURL String
+//   createdAt DateTime @default(now()) @map("created_at")
+//   updatedAt DateTime @updatedAt @map("updated_at")
+
+//   @@map("profiles")
+// }
+
+model Table {
+  id        String   @id @default(uuid())
+  number    Int      @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("table")
+}
+
 // 1 -> N [Category -> Product]
+// model Genres {
 model Category {
   id        String   @id @default(uuid())
   name      String   @unique
-  // title     String   @unique
-  //   imageURL  String
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   products Product[]
 
+  // @@map("genres")
   @@map("category")
 }
 
@@ -58,16 +77,4 @@ model Product {
 
   // @@map("games")
   @@map("product")
-}
-
-model Table {
-  // model Genres {
-  id        String   @id @default(uuid())
-  //   name String @unique
-  number    Int      @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  // @@map("genres")
-  @@map("table")
 }
