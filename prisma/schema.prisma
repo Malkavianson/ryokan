@@ -1,5 +1,4 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client-js"
@@ -23,17 +22,21 @@ model User {
   @@map("user")
 }
 
-// model Profiles {
-//   id        String   @id @default(uuid())
-//   title     String   @unique
-//   imageURL  String
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
+// 1 -> N [Category -> Product]
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  // title     String   @unique
+  //   imageURL  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-//   @@map("profiles")
-// }
+  products Product[]
 
-// Games
+  @@map("category")
+}
+
+// model Games {
 model Product {
   id          String   @id @default(uuid())
   name        String   @unique
@@ -50,6 +53,9 @@ model Product {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String   @map("category_id")
+
   // @@map("games")
   @@map("product")
 }
@@ -57,8 +63,8 @@ model Product {
 model Table {
   // model Genres {
   id        String   @id @default(uuid())
-  number    Int      @unique
   //   name String @unique
+  number    Int      @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 

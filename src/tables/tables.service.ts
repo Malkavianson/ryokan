@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { handleErrorConstraintUnique } from 'src/utils/handle-error-unique.util';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -7,14 +8,6 @@ import { Table } from './entities/table.entity';
 @Injectable()
 export class TablesService {
 	constructor(private readonly prisma: PrismaService) {}
-
-	handleError(error: Error): never {
-		const splitedMessage = error.message.split('`');
-
-		const errorMessage = `${splitedMessage[splitedMessage.length - 2]} already registred`;
-
-		throw new UnprocessableEntityException(errorMessage);
-	}
 
 	async verifyIdAndReturnTable(id: string): Promise<Table> {
 		const table: Table = await this.prisma.table.findUnique({
@@ -29,7 +22,7 @@ export class TablesService {
 	}
 
 	async create(dto: CreateTableDto): Promise<Table | void> {
-		return this.prisma.table.create({ data: dto }).catch(this.handleError);
+		return this.prisma.table.create({ data: dto }).catch(handleErrorConstraintUnique);
 	}
 
 	async findAll(): Promise<Table[]> {
@@ -43,7 +36,7 @@ export class TablesService {
 	async update(id: string, dto: UpdateTableDto) {
 		this.verifyIdAndReturnTable(id);
 
-		return this.prisma.table.update({ where: { id }, data: dto }).catch(this.handleError);
+		return this.prisma.table.update({ where: { id }, data: dto }).catch(handleErrorConstraintUnique);
 	}
 
 	async remove(id: string) {
