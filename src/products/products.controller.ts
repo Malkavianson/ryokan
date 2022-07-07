@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ProductsService } from './products.service';
+import { FavoriteProductDto } from './dto/favorite-product.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 
 @ApiTags('Products')
@@ -16,6 +17,14 @@ export class ProductsController {
 	})
 	create(@Body() dto: CreateProductDto) {
 		return this.productsService.create(dto);
+	}
+
+	@Post('fav')
+	@ApiOperation({
+		summary: 'User new favorite product',
+	})
+	favorite(@Body() dto: FavoriteProductDto) {
+		return this.productsService.favorite(dto);
 	}
 
 	@Get()

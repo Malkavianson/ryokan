@@ -4,6 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
+import { FavoriteProductDto } from './dto/favorite-product.dto';
 
 @Injectable()
 export class ProductsService {
@@ -23,6 +24,10 @@ export class ProductsService {
 
 	async create(dto: CreateProductDto): Promise<Product | void> {
 		return this.prisma.product.create({ data: dto }).catch(handleErrorConstraintUnique);
+	}
+
+	favorite(dto: FavoriteProductDto) {
+		return this.prisma.favorite.create({ data: dto });
 	}
 
 	findAll(): Promise<Product[]> {

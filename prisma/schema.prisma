@@ -19,6 +19,8 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  favorite Favorite[]
+
   @@map("user")
 }
 
@@ -72,9 +74,25 @@ model Product {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId String   @map("category_id")
+  favorite   Favorite[]
+  category   Category   @relation(fields: [categoryId], references: [id])
+  categoryId String     @map("category_id")
 
   // @@map("games")
   @@map("product")
+}
+
+// N -> N [User <-> Product]
+model Favorite {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  product     Product @relation(fields: [productName], references: [name])
+  productName String  @map("product_name")
+
+  @@unique([userId, productName])
+  @@map("favorite")
 }
