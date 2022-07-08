@@ -13,7 +13,7 @@ export class FavoriteProductDto {
 	@IsNotEmpty()
 	@ApiProperty({
 		description: 'Procuct favorited',
-		example: 'Temaki Philadelphia',
+		example: 'Temaki Hot Philadelphia',
 	})
 	productName: string;
 }

@@ -5,6 +5,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/users.entity';
 import * as bcrypt from 'bcryptjs';
+import { Favorite } from 'src/favorites/entities/favorite.entitiy';
 
 @Injectable()
 export class UsersService {
@@ -15,6 +16,7 @@ export class UsersService {
 		updatedAt: true,
 		createdAt: true,
 	};
+
 	constructor(private readonly prisma: PrismaService) {}
 
 	async verifyIdAndReturnUser(id: string): Promise<User> {
@@ -39,15 +41,20 @@ export class UsersService {
 			password: hashedPassword,
 		};
 
-		return this.prisma.user.create({ data, select: this.userSelect }).catch(handleErrorConstraintUnique);
+		return await this.prisma.user.create({ data, select: this.userSelect }).catch(handleErrorConstraintUnique);
 	}
 
-	findAll(): Promise<User[]> {
+	async findAll(): Promise<User[]> {
 		return this.prisma.user.findMany({ select: this.userSelect });
 	}
 
-	findOne(id: string): Promise<User> {
-		return this.verifyIdAndReturnUser(id);
+	async findOne(id: string): Promise<User> {
+		return await this.verifyIdAndReturnUser(id);
+	}
+
+	async findAllFav(id: string): Promise<Favorite[]> {
+		await this.verifyIdAndReturnUser(id);
+		return await this.prisma.favorite.findMany({ where: { userId: id } });
 	}
 
 	async update(id: string, dto: UpdateUserDto): Promise<User | void> {
@@ -60,13 +67,13 @@ export class UsersService {
 			password: hashedPassword,
 		};
 
-		return this.prisma.user.update({ where: { id }, data, select: this.userSelect }).catch(handleErrorConstraintUnique);
+		return await this.prisma.user.update({ where: { id }, data, select: this.userSelect }).catch(handleErrorConstraintUnique);
 	}
 
 	async remove(id: string) {
 		await this.verifyIdAndReturnUser(id);
 
-		return this.prisma.user.delete({
+		return await this.prisma.user.delete({
 			where: { id },
 			select: { name: true, email: true },
 		});

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -42,9 +42,13 @@ export class CategoriesService {
 	async remove(id: string) {
 		await this.verifyIdAndReturnCategory(id);
 
-		return this.prisma.category.delete({
-			where: { id },
-			select: { name: true },
-		});
+		try {
+			return await this.prisma.category.delete({
+				where: { id },
+				select: { name: true },
+			});
+		} catch (err) {
+			throw new UnauthorizedException(`Category ID: '${id}' still filled`);
+		}
 	}
 }
