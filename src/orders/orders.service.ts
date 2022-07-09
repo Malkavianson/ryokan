@@ -8,8 +8,7 @@ export class OrdersService {
 	constructor(private readonly prisma: PrismaService) {}
 
 	create(dto: CreateOrderDto) {
-		const productsIds = dto.products.map(e => ({ id: e }));
-
+		console.log(dto);
 		const data: Prisma.OrderCreateInput = {
 			table: {
 				connect: {
@@ -22,7 +21,12 @@ export class OrdersService {
 				},
 			},
 			products: {
-				connect: productsIds,
+				createMany: {
+					data: dto.products.map(e => ({
+						productId: e.productId,
+						quantity: e.quantity,
+					})),
+				},
 			},
 		};
 
@@ -30,9 +34,11 @@ export class OrdersService {
 			data,
 			select: {
 				id: true,
-				createdAt: true,
-				tableNumber: true,
-				userId: true,
+				table: {
+					select: {
+						number: true,
+					},
+				},
 				user: {
 					select: {
 						name: true,
@@ -40,7 +46,12 @@ export class OrdersService {
 				},
 				products: {
 					select: {
-						name: true,
+						quantity: true,
+						product: {
+							select: {
+								name: true,
+							},
+						},
 					},
 				},
 			},
@@ -51,9 +62,11 @@ export class OrdersService {
 		return this.prisma.order.findMany({
 			select: {
 				id: true,
-				createdAt: true,
-				tableNumber: true,
-				userId: true,
+				table: {
+					select: {
+						number: true,
+					},
+				},
 				user: {
 					select: {
 						name: true,
@@ -61,7 +74,12 @@ export class OrdersService {
 				},
 				products: {
 					select: {
-						name: true,
+						quantity: true,
+						product: {
+							select: {
+								name: true,
+							},
+						},
 					},
 				},
 			},
@@ -73,9 +91,11 @@ export class OrdersService {
 			where: { id },
 			select: {
 				id: true,
-				createdAt: true,
-				tableNumber: true,
-				userId: true,
+				table: {
+					select: {
+						number: true,
+					},
+				},
 				user: {
 					select: {
 						name: true,
@@ -83,7 +103,12 @@ export class OrdersService {
 				},
 				products: {
 					select: {
-						name: true,
+						quantity: true,
+						product: {
+							select: {
+								name: true,
+							},
+						},
 					},
 				},
 			},
