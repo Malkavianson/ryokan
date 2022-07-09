@@ -9,49 +9,52 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  // cpf       String
-  // isAdmin   Boolean
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  favorite Favorite[]
-
-  @@map("user")
-}
-
-// model Profiles {
-//   id       String @id @default(uuid())
-//   title    String @unique
-//   imageURL String
-//   createdAt DateTime @default(now()) @map("created_at")
-//   updatedAt DateTime @updatedAt @map("updated_at")
-
-//   @@map("profiles")
-// }
-
 model Table {
   id        String   @id @default(uuid())
   number    Int      @unique
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  orders    Order[]
 
   @@map("table")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  // cpf       String
+  // isAdmin   Boolean
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  favorite  Favorite[]
+  orders    Order[]
+
+  @@map("user")
+}
+
+// N -> N [User <-> Product]
+model Favorite {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now()) @map("created_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String   @map("user_id")
+  product     Product  @relation(fields: [productName], references: [name], onDelete: Cascade)
+  productName String   @map("product_name")
+
+  @@unique([userId, productName])
+  @@map("favorite")
 }
 
 // 1 -> N [Category -> Product]
 // model Genres {
 model Category {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  products Product[]
+  id        String    @id @default(uuid())
+  name      String    @unique
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  products  Product[]
 
   // @@map("genres")
   @@map("category")
@@ -59,11 +62,6 @@ model Category {
 
 // model Games {
 model Product {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String
-  price       Float
-  image       String
   // title              String
   // description        String
   // coverImageUrl      String
@@ -71,28 +69,35 @@ model Product {
   // imdbScore          Int
   // trailerYouTubeUrl  String
   // gameplayYouTubeUrl String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  favorite   Favorite[]
-  category   Category   @relation(fields: [categoryId], references: [id])
-  categoryId String     @map("category_id")
-
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String
+  price       Float
+  image       String
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  favorite    Favorite[]
+  category    Category?  @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  String?    @map("category_id")
+  orders      Order[]
   // @@map("games")
+
   @@map("product")
 }
 
-// N -> N [User <-> Product]
-model Favorite {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now()) @map("created_at")
+// model Profiles {
+model Order {
 
-  user   User   @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+  //   title    String @unique
+  //   imageURL String
+  id          String    @id @default(uuid())
+  createdAt   DateTime  @default(now()) @map("created_at")
+  table       Table?    @relation(fields: [tableNumber], references: [number], onDelete: SetNull)
+  tableNumber Int       @map("table_number")
+  user        User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId      String    @map("user_id")
+  products    Product[]
 
-  product     Product @relation(fields: [productName], references: [name])
-  productName String  @map("product_name")
-
-  @@unique([userId, productName])
-  @@map("favorite")
+  //   @@map("profiles")
+  @@map("order")
 }

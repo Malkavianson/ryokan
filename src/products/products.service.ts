@@ -7,6 +7,7 @@ import { Product } from './entities/product.entity';
 import { FavoriteProductDto } from '../favorites/dto/favorite.dto';
 import { Favorite } from 'src/favorites/entities/favorite.entitiy';
 import { User } from 'src/users/entities/users.entity';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProductsService {
@@ -57,7 +58,20 @@ export class ProductsService {
 			throw new NotFoundException(`ID User '${dto.userId}' not found`);
 		}
 
-		return await this.prisma.favorite.create({ data: dto });
+		const data: Prisma.FavoriteCreateInput = {
+			user: {
+				connect: {
+					id: dto.userId,
+				},
+			},
+			product: {
+				connect: {
+					name: dto.productName,
+				},
+			},
+		};
+
+		return this.prisma.favorite.create({ data });
 	}
 
 	async findAll(): Promise<Product[]> {
