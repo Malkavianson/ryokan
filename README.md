@@ -46,10 +46,10 @@ Acesse [http://localhost:3333](http://localhost:3333) para visualizá-lo em seu 
 
 > ## comandos úteis:
 >
->> - nest g resource {nome} --no-spec
+> > - nest g resource {nome} --no-spec
 >
->> - npx prisma generate
->> - npx prisma db push
+> > - npx prisma generate
+> > - npx prisma db push
 >
 > ---
 
