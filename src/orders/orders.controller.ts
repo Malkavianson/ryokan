@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrderDto } from './dto/create-order.dto';
-// import { UpdateOrderDto } from './dto/update-order.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-// import { Order } from './entities/order.entity';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard())
 @ApiTags('Orders')
+@ApiBearerAuth()
 @Controller('orders')
 export class OrdersController {
 	constructor(private readonly ordersService: OrdersService) {}
