@@ -18,7 +18,19 @@ async function bootstrap() {
 
 	console.log('Server Started\n\nMapping documentation');
 
-	const config = new DocumentBuilder().setTitle('Ryokan').setDescription('API de controle de Ryokan').setVersion('1.1').addTag('Status').addTag('Users').addTag('Tables').addTag('Products').addTag('Categories').addBearerAuth().addServer('http://localhost:3333').build();
+	const config = new DocumentBuilder()
+		.setTitle('Ryokan')
+		.setDescription('API de controle de Ryokan')
+		.setVersion('1.1')
+		.addTag('Status')
+		.addTag('Users')
+		.addTag('Tables')
+		.addTag('Products')
+		.addTag('Categories')
+		.addBearerAuth()
+		.addServer('http://localhost:3333')
+		.addServer('https://ryokan-production.up.railway.app/')
+		.build();
 
 	const document = SwaggerModule.createDocument(app, config);
 	SwaggerModule.setup('docs', app, document);
