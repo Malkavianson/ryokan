@@ -28,8 +28,8 @@ async function bootstrap() {
 		.addTag('Products')
 		.addTag('Categories')
 		.addBearerAuth()
-		.addServer('http://localhost:3333')
 		.addServer('https://ryokan-production.up.railway.app/')
+		.addServer('http://localhost:3333')
 		.build();
 
 	const document = SwaggerModule.createDocument(app, config);
