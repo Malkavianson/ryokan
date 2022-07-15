@@ -20,7 +20,30 @@ async function bootstrap() {
 
 	const config = new DocumentBuilder()
 		.setTitle('Ryokan')
-		.setDescription('API de controle de Ryokan')
+		.setDescription(
+			`Api de controle Ryokan.\n\n
+
+Esta API possui os seguintes recursos:\n
+    Usuarios\n
+    Mesas\n
+    Produtos\n
+    Categorias\n
+    Pedidos\n
+    Autenticação\n
+\n
+Rotas que não necessitam autenticação:\n
+    @GET /status\n
+    @POST /users\n
+    @GET /products\n
+    @GET /products/{id}\n
+    @POST /auth/login\n
+\n
+Modo de usar:\n
+    Utilizando @POST /users, registre um novo usuário respeitando seu respectivo 'schema'\n
+    Autentique a conexão através da rota @POST /auth/login enviando email e senha e salve o 'TOKEN' gerado\n
+    Valide sua conexão com o token com autenticação ao portador(Bearer)\n
+    `,
+		)
 		.setVersion('1.1')
 		.addTag('Status')
 		.addTag('Users')
