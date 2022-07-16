@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { FavoriteProductDto } from '../favorites/dto/favorite.dto';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -37,8 +37,8 @@ export class ProductsController {
 	@ApiOperation({
 		summary: 'List all products',
 	})
-	async findAll(): Promise<Product[]> {
-		return await this.productsService.findAll();
+	findAll(@Query() query: Partial<Product>): Promise<Product[]> {
+		return this.productsService.findAll(query);
 	}
 
 	@Get(':id')
