@@ -40,9 +40,29 @@ npm run start
 npm run start:dev
 ```
 
+
+
+Para conseguir trabalhar com o banco de dados você deverá criar um arquivo .env e adicionar uma url de conexão com seu Postgres local com a chave DATABASE_URL.
+
+```
+DATABASE_URL="postgresql://yourUser:0000000@localhost:PORT/database"
+```
+
+
 Acesse [http://localhost:3333](http://localhost:3333) para visualizá-lo em seu navegador de forma local
 
 ---
+
+## Execução
+
+
+## Funcionalidades
+
+Para acessar a lista de endpoints e funcionalidades da aplicação, acesse nossa documentação do [Swagger](https://ryokan-production.up.railway.app), lá você poderá testar todas as rotas.
+
+Você também pode analisar nosso <a href="./db.pdf" download>Diagrama de Relacionamento de Entidades</a>
+
+
 
 > ## comandos úteis:
 >
