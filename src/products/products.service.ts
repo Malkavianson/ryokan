@@ -1,5 +1,5 @@
 import { handleErrorConstraintUnique } from 'src/utils/handle-error-unique.util';
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -74,10 +74,17 @@ export class ProductsService {
 		return this.prisma.favorite.create({ data });
 	}
 
-	async findAll(): Promise<Product[]> {
-		return await this.prisma.product.findMany();
-	}
+	async findAll(query: Partial<Product>): Promise<Product[]> {
+		const products: Product[] = await this.prisma.product.findMany({ where: query }).catch(() => {
+			throw new UnprocessableEntityException('Invalid query format');
+		});
 
+		if (products.length === 0) {
+			throw new NotFoundException('Search did not find any results');
+		}
+
+		return products;
+	}
 	async findOne(id: string): Promise<Product> {
 		return await this.verifyIdAndReturnProduct(id);
 	}
