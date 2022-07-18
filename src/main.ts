@@ -42,14 +42,16 @@ Modo de usar:\n
     Utilizando @POST /users, registre um novo usuário respeitando seu respectivo 'schema'\n
     Autentique a conexão através da rota @POST /auth/login enviando email e senha e salve o 'TOKEN' gerado\n
     Valide sua conexão com o token com autenticação ao portador(Bearer)\n
+\n
     `,
 		)
 		.setVersion('1.1')
 		.addTag('Status')
 		.addTag('Users')
-		.addTag('Tables')
-		.addTag('Products')
 		.addTag('Categories')
+		.addTag('Products')
+		.addTag('Tables')
+		.addTag('Orders')
 		.addBearerAuth()
 		.addServer('https://ryokan-production.up.railway.app/')
 		.addServer('http://localhost:3333')
